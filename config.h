@@ -26,9 +26,8 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	/* class  instance  title  tags mask  isfloating  monitor */
+	{ NULL,   NULL,     NULL,  0,         False,      -1 },
 };
 
 /* layout(s) */
@@ -37,33 +36,33 @@ static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
 static const Layout layouts[] = {
-	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
+	/* symbol  arrange function */
+	{ "[]=",   tile },    /* first entry is default */
+	{ "><>",   NULL },    /* no layout function means floating behavior */
+	{ "[M]",   monocle },
 };
 
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+	{ MODKEY,                       KEY, view,       {.ui = 1 << TAG} }, \
+	{ MODKEY|ControlMask,           KEY, toggleview, {.ui = 1 << TAG} }, \
+	{ MODKEY|ShiftMask,             KEY, tag,        {.ui = 1 << TAG} }, \
+	{ MODKEY|ControlMask|ShiftMask, KEY, toggletag,  {.ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "kitty", NULL };
-static const char *mutecmd[] =        { "pulsemixer",                     "--toggle-mute",                                NULL };
-static const char *mutemiccmd[] =     { "pulsemixer", "--id", "source-0", "--toggle-mute",                                NULL };
-static const char *lowervolumecmd[] = { "pulsemixer",                     "--change-volume", "-5",                        NULL };
-static const char *lowermiccmd[] =    { "pulsemixer", "--id", "source-0", "--change-volume", "-5",                        NULL };
-static const char *raisevolumecmd[] = { "pulsemixer",                     "--change-volume", "+5", "--max-volume", "100", NULL };
-static const char *raisemiccmd[] =    { "pulsemixer", "--id", "source-0", "--change-volume", "+5", "--max-volume", "200", NULL };
+static const char *dmenucmd[]       = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *termcmd[]        = { "kitty",                                                                                                              NULL };
+static const char *mutecmd[]        = { "pulsemixer",                     "--toggle-mute",                                                                    NULL };
+static const char *mutemiccmd[]     = { "pulsemixer", "--id", "source-0", "--toggle-mute",                                                                    NULL };
+static const char *lowervolumecmd[] = { "pulsemixer",                     "--change-volume", "-5",                                                            NULL };
+static const char *lowermiccmd[]    = { "pulsemixer", "--id", "source-0", "--change-volume", "-5",                                                            NULL };
+static const char *raisevolumecmd[] = { "pulsemixer",                     "--change-volume", "+5", "--max-volume", "100",                                     NULL };
+static const char *raisemiccmd[]    = { "pulsemixer", "--id", "source-0", "--change-volume", "+5", "--max-volume", "200",                                     NULL };
 
 static Key keys[] = {
 	/* modifier         key                      function        argument */
@@ -111,17 +110,17 @@ static Key keys[] = {
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
-	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-	{ ClkTagBar,            0,              Button1,        view,           {0} },
-	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+	/* click         event mask  button   function        argument */
+	{ ClkLtSymbol,   0,          Button1, setlayout,      {0} },
+	{ ClkLtSymbol,   0,          Button3, setlayout,      {.v = &layouts[2]} },
+	{ ClkWinTitle,   0,          Button2, zoom,           {0} },
+	{ ClkStatusText, 0,          Button2, spawn,          {.v = termcmd } },
+	{ ClkClientWin,  MODKEY,     Button1, movemouse,      {0} },
+	{ ClkClientWin,  MODKEY,     Button2, togglefloating, {0} },
+	{ ClkClientWin,  MODKEY,     Button3, resizemouse,    {0} },
+	{ ClkTagBar,     0,          Button1, view,           {0} },
+	{ ClkTagBar,     0,          Button3, toggleview,     {0} },
+	{ ClkTagBar,     MODKEY,     Button1, tag,            {0} },
+	{ ClkTagBar,     MODKEY,     Button3, toggletag,      {0} },
 };
 
